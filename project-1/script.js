@@ -26,20 +26,39 @@ canvas.height = window.innerHeight;
 
 var c = canvas.getContext('2d');
 
+//net
+var net = {
+
+  h : 30,
+  w : 10,
+  x : canvas.width/2, //
+  y : 0,
+  netGap : canvas.height/15,
+
+//draw net function
+  draw : function(){
+     for(this.y = 0; this.y < canvas.height; this.y += this.netGap){
+      c.beginPath()
+      c.fillRect(this.x, this.y+this.netGap, this.w, this.h)
+  }
+  }
+}
+
 //ball
-var spawnAreaOnX = innerWidth-50;
-var spawnAreaOnY = innerHeight-50;
+
+var spawnAreaOnX = canvas.width-50;
+var spawnAreaOnY = canvas.height-50;
 var ballX = (spawnAreaOnX/2);
 var ballY = (spawnAreaOnY/2);
-var balldx = (Math.random() - 0.5) * 30;
-var balldy = (Math.random() - 0.5) * 30;
+var ballSpeedX = /*((Math.random() - 0.5) * 7) */ (Math.random() < 0.5 ? -1 : 1) * 7; //Math.random() - 0.5 spawns the ball towards a random direction. * 7 is just the speed
+var ballSpeedY = /*((Math.random() - 0.5) * 7) */ (Math.random() < 0.5 ? -1 : 1) * 7; //Math.random() - 0.5 spawns the ball towards a random direction. * 7 is just the speed
 // ball object
 var ball = {
 
   x : ballX,
   y : ballY,
-  dx : balldx,
-  dy : balldy,
+  dx : ballSpeedX,
+  dy : ballSpeedY,
   radius : 5,
 
 //draw the ball function, on x & y axis, random spot
@@ -56,23 +75,22 @@ var ball = {
   move : function(){
   this.x += this.dx; // makes ball move, along x axis, once it is created
   this.y += this.dy; // makes ball move, along y axis, once it is created
+
+  if ((this.x + this.radius > canvas.width) || (this.x - this.radius < 0)) {
+      this.dx = -this.dx;
+    } else if(this.y + this.radius > canvas.height || this.y - this.radius < 0){
+      this.dy = -this.dy;
+   }
+ }
 }
-}
-//   if((this.x + this.radius > aiPaddleWidth) || (this.x - this.radius < playerPaddleWidth)){
-//     this.x -= this.dx;
-//   } else if((this.y + this.radius > innerHeight) || (this.y - this.radius) > 0){
-//     this.y -= this.dy;
-//   }
-// }
 
 //}//end of ball object
-
 
  // ai object
   var ai = {
     x: 20,
     y: canvas.height/2,
-    height: 50,
+    height: 70,
     width: 10,
 
     draw : function(){
@@ -90,14 +108,14 @@ var ball = {
   var player = {
     x: canvas.width-20,
     y: canvas.height/2,
-    height: 50,
+    height: 70,
     width: 10,
 
     draw : function(){
       c.beginPath();
       c.fillRect(this.x, this.y, this.width, this.height);
     }
-}
+  }
 //   move : function(){
 
 //    }
@@ -112,6 +130,7 @@ function animate(){
   ball.move();
   ai.draw();
   player.draw();
+  net.draw();
 }
 animate();
 
