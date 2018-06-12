@@ -36,14 +36,15 @@ var net = {
   w : 5,
   x : canvas.width/2, //
   y : 0,
-  netGap : canvas.height/10, //gap between each net
+  netGap : canvas.height/13, //gap between each net //64.7
 
 //draw net function
   draw : function(){
      for(this.y = 0; this.y < canvas.height; this.y += this.netGap){ // -this.y += this.netGap- create each net with a gap in between each other
       c.beginPath()
+      c.fill()
       c.fillRect(this.x, this.y+this.netGap, this.w, this.h)
-  }
+    }
   }
 }
 
@@ -64,6 +65,8 @@ var ball = {
   dy : ballSpeedY,
   radius : 5,
 
+
+
 //draw the ball function, on x & y axis, random spot
   draw : function(){
   c.beginPath()
@@ -82,20 +85,25 @@ var ball = {
 //ball can bounce off top and bottom screen
 //ball can bounce off left and right screen, *** but not against the paddle ***
 
-  if ((this.x + this.radius > canvas.width) || (this.x - this.radius < 0)) {
+//***
+//find player paddle and AI paddle
+//player: x 20, y canvas.height/2 - player.y
+
+//
+  if (this.x + this.radius > ai.x || this.x - this.radius < player.x) {//the part where its supposed to bounce off against paddle.
       this.dx = -this.dx;
-    } else if(this.y + this.radius > canvas.height || this.y - this.radius < 0){
+    }
+    else if(this.y + this.radius == player.y || this.y - this.radius == ai.y || this.y + this.radius > canvas.height || this.y - this.radius < 0){
       this.dy = -this.dy;
    }
  }
 }
-
 //}//end of ball object
 
 // player object
   var player = {
 
-    x: canvas.width-20,
+    x: 20,
     y: canvas.height/2,
     height: 70,
     width: 10,
@@ -103,6 +111,8 @@ var ball = {
     moveDown: downKey, //downArrow's keyCode is 40
     //use keyCode to represent a key on the keyboard. It tells the program what key has been pressed or released.
     //a keyCode is returned to the program when the button has been pressed.
+
+
 
     draw : function(){
       c.beginPath();
@@ -115,10 +125,10 @@ var ball = {
       // else if down key is pressed,
       //   move player down
 
-          if(keystate[this.moveUp]){
-            this.y += 7;
-          } else if (keystate[this.moveDown]) {
+          if(keystate[this.moveUp]){ //if the key's data(the key.keyCode value, which is the key code), is equal to this.moveup's keycode, the condition is true)
             this.y -= 7;
+          } else if (keystate[this.moveDown]) { //if the key's data(the key.keyCode value, which is the key code), is equal to this.moveup's keycode, the condition is true)
+            this.y += 7;
           }
         }
       }
@@ -133,9 +143,10 @@ var ball = {
             delete keystate[key.keyCode];
       });
 
+
  // ai object
   var ai = {
-    x: 20,
+    x: canvas.width-20,
     y: canvas.height/2,
     height: 70,
     width: 10,
@@ -156,11 +167,12 @@ var ball = {
     requestAnimationFrame(animate);
     c.clearRect(0, 0, innerWidth, innerHeight);
     ball.draw();
-    ball.move();
+    //ball.move();
     ai.draw();
     player.draw();
     player.move();
     net.draw();
+    ball.move(player.y);
   }
   animate();
 
