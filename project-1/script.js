@@ -81,23 +81,22 @@ var ball = {
   move : function(){
   this.x += this.dx; // makes ball move, along x axis, once it is created
   this.y += this.dy; // makes ball move, along y axis, once it is created
-
-//ball can bounce off top and bottom screen
-//ball can bounce off left and right screen, *** but not against the paddle ***
-
-//***
-//find player paddle and AI paddle
-//player: x 20, y canvas.height/2 - player.y
-
-//
   if (this.x + this.radius > ai.x || this.x - this.radius < player.x) {//the part where its supposed to bounce off against paddle.
       this.dx = -this.dx;
     }
     else if(this.y + this.radius == player.y || this.y - this.radius == ai.y || this.y + this.radius > canvas.height || this.y - this.radius < 0){
       this.dy = -this.dy;
-   }
+    }
+    else if(this.x + this.radius > canvas.width || this.x - this.radius < 0){
+      //the ball moves out of the screen
+      //the ball the re-spawns at the center of the screen
+
+      //canvas.width/2
+    }
  }
 }
+
+
 //}//end of ball object
 
 // player object
@@ -146,6 +145,7 @@ var ball = {
 
  // ai object
   var ai = {
+
     x: canvas.width-20,
     y: canvas.height/2,
     height: 70,
@@ -154,11 +154,14 @@ var ball = {
     draw : function(){
       c.beginPath();
       c.fillRect(this.x, this.y, this.width, this.height);
-    }
+    },
 
-   //  move : function(){
-
-   //  }
+     move : function(){
+    //calculate the destination on y axis the ai should be going, which is where the ball wants to go to
+    var aiY = ball.y - (this.height - ball.radius) * 0.5;
+    //this.y = aiY //this will mean that ai's y position is exactly the same as the ball. Meaning the ai will follow the ball perfectly
+    this.y += (aiY-this.y) * 0.15;//this will mean that the ai is slightly slower than the ball. Meaning the ai will not be able to follow the ball perfectly
+     }
     }
 
 
@@ -167,8 +170,8 @@ var ball = {
     requestAnimationFrame(animate);
     c.clearRect(0, 0, innerWidth, innerHeight);
     ball.draw();
-    //ball.move();
     ai.draw();
+    ai.move(ball.y, ball.radius);
     player.draw();
     player.move();
     net.draw();
@@ -177,32 +180,9 @@ var ball = {
   animate();
 
 
-//*** paddle cannot move yet ***
 //*** score system not started yet ***
-
-
-
-
-
-
-
-
-//player 1 is on the left, 2/AI right
-
-
-// ballX
-// ballY
-//
-//move the ball, vector of the ball - dy, dx, at fixed speed, but random direction
-// ballSpeedX
-// ballSpeedY
-
-//bounce the ball against the walls and the paddle
-
-
-
 //set up the score
-//draw the middle line
+
 
 
 
