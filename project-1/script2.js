@@ -11,11 +11,13 @@ var ballSpeedY = (Math.random() < 0.5 ? -1 : 1) * 5;
 var paddleY = 250;
 const paddleHeight = 100;
 var paddleMouseY;
+var playerScore = 0;
 
 //ai paddle details
 var aiPaddleY = 250;
 const paddleThickness = 10;
 const aiPaddleHeight = 100;
+var aiScore = 0;
 
 
 window.onload = function() {
@@ -60,10 +62,11 @@ var move = function(){
 
     //ball movement horizontally, towards right
     if(ballX > canvas.width) {          //when the ball touches the right side of canvas
-      if(ballY > aiPaddleY && ballY < aiPaddleY+paddleHeight){
+      if(ballY > aiPaddleY && ballY < aiPaddleY+paddleHeight){ //if the ball is between the top and bottom of the paddle, in other words, touches the paddle
           ballSpeedX = -ballSpeedX;     //the ball will reverse towards the left
       }else {
       resetBall();                      //reset the ball when it touches the right side of the canvas, instead of bouncing off
+      playerScore++;                    //adds one point to player
       }
     }
     //ball moving horizontally, towards left
@@ -72,7 +75,8 @@ var move = function(){
           ballSpeedX = -ballSpeedX;     //the ball will turn back towards the right
        }else {
        resetBall();                     //reset the ball when it touches the left side of the canvas, instead of bouncing off
-        }
+       aiScore++;                       //adds one point to ai
+       }
     }
     //ball movement vertically
     if(ballY < 0) {                    //when the ball touches the bottom of canvas
@@ -80,6 +84,8 @@ var move = function(){
     } else if(ballY > canvas.height) { //when the ball touches the top of the canvas
       ballSpeedY =- ballSpeedY;        //the ball will turn back towards the bottom
     }
+
+    aiMove();
 }
 
 var drawAll = function(){
@@ -94,10 +100,7 @@ var drawAll = function(){
   //draws the ball
   drawCircle(ballX, ballY, 5, 'white');
 
-  //draws the net
-  // drawNet(canvas.width/2, netY, netWidth, netHeight, 'white');
-
-  //net details
+  //net details and draw nets
   var netWidth = 5;
   var netX = canvas.width/2;
   var netY = 0;
@@ -106,6 +109,11 @@ var drawAll = function(){
     c.fillRect(netX, netY+netGap*0.25, netWidth, netGap*0.5);
     netY+=netGap;
   }
+
+  //draws the score
+  c.fillText("Player Score: " +playerScore, 100, 100);
+  c.fillText("AI Score: " +aiScore, canvas.width-100, 100);
+  c.font = '200px';
 
 }
 
@@ -122,12 +130,19 @@ var drawRect = function(x, y, width, height, drawColor){
 }
 
 
-// function drawNet(x, y, width, height, drawColor){
-//   for (var netY = 0; netY < canvas.height; netY = netHeight+netGap){
-//       c.fillStyle = drawColor;
-//       c.fillRect(x, y, width, height);
-//     }
-//   }
+var aiMove = function(){
+  var aiPaddleYCenter = aiPaddleY + (paddleHeight/2);//finding the center of ai's paddle, to match with the ball to follow it
+  if(aiPaddleYCenter < ballY-35){//the paddle will match the ball at 35 lower than its center. meaning the ball will not bounce off from the center of the ai's paddle
+    aiPaddleY += 6;
+  }
+  else if(aiPaddleYCenter > ballY-35) {//the paddle will match the ball at 35 higher than its center. meaning the ball will not bounce off from the center of the ai's paddle
+    aiPaddleY -= 6;
+  }
+}
+
+
+
+
 
 
 
