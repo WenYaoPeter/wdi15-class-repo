@@ -4,8 +4,8 @@ var c;
 //ball details
 var ballX = 400;
 var ballY = 300;
-var ballSpeedX = 5;
-var ballSpeedY = 5;
+var ballSpeedX = (Math.random() < 0.5 ? -1 : 1) * 5;
+var ballSpeedY = (Math.random() < 0.5 ? -1 : 1) * 5;
 
 //player paddle details
 var paddleY = 250;
@@ -24,7 +24,7 @@ window.onload = function() {
 
   var framesPerSecond = 30;
   setInterval(function() {
-      move(); //move the ball
+      move();    //move the ball
       drawAll(); //draw all items
   }, 1000/framesPerSecond);
 
@@ -38,16 +38,16 @@ window.onload = function() {
 }
 
 var resetBall = function(){
-  ballSpeedX = -ballSpeedX;//re-spawn the ball in the opposite direction of where it ended
-  ballX = canvas.width/2;//resets the ball in the center horizontally
-  ballY = canvas.height/2;//resets the ball in the center vertically
+  ballSpeedX = -ballSpeedX;            //re-spawn the ball in the opposite direction of where it ended
+  ballX = canvas.width/2;              //resets the ball in the center horizontally
+  ballY = canvas.height/2;             //resets the ball in the center vertically
 }
 
-var calculateMousePos = function(event){//this event, or function, will activate each time the mouse moves
-  var rect = canvas.getBoundingClientRect();//the area of the canvas
-  var root = document.documentElement;//html page
-  var mouseX = event.clientX - rect.left - root.scrollLeft;//the position it's getting from mouse x
-  var mouseY = event.clientY - rect.top - root.scrollTop;//the position it's getting from mouse y
+var calculateMousePos = function(event){                    //this event, or function, will activate each time the mouse moves
+  var rect = canvas.getBoundingClientRect();                //the area of the canvas
+  var root = document.documentElement;                      //html page
+  var mouseX = event.clientX - rect.left - root.scrollLeft; //the position it's getting from mouse x
+  var mouseY = event.clientY - rect.top - root.scrollTop;   //the position it's getting from mouse y
   return {
     x:mouseX,
     y:mouseY
@@ -58,19 +58,20 @@ var move = function(){
     ballX = ballX + ballSpeedX; //shifting the ball
     ballY = ballY + ballSpeedY; //shifting the ball
 
-    //ball movement horizontally
-    if(ballX > canvas.width) {    //when the ball touches the right side of canvas
-      if(ballY > paddleMouseY && ballY < paddleMouseY+paddleHeight){
-          ballSpeedX = -ballSpeedX;//the ball will reverse towards the left
+    //ball movement horizontally, towards right
+    if(ballX > canvas.width) {          //when the ball touches the right side of canvas
+      if(ballY > aiPaddleY && ballY < aiPaddleY+paddleHeight){
+          ballSpeedX = -ballSpeedX;     //the ball will reverse towards the left
       }else {
-      resetBall();                //reset the ball when it touches the right side of the canvas, instead of bouncing off
+      resetBall();                      //reset the ball when it touches the right side of the canvas, instead of bouncing off
       }
     }
-    if(ballX < 0) {        //when the ball touches the left side of the canvas
+    //ball moving horizontally, towards left
+    if(ballX < 0) {                     //when the ball touches the left side of the canvas
        if(ballY > paddleMouseY && ballY < paddleMouseY+paddleHeight){ //if the ball is between the top and bottom of the paddle, in other words, touches the paddle
-        ballSpeedX = -ballSpeedX; //the ball will turn back towards the right
+          ballSpeedX = -ballSpeedX;     //the ball will turn back towards the right
        }else {
-        resetBall();                 //reset the ball when it touches the left side of the canvas, instead of bouncing off
+       resetBall();                     //reset the ball when it touches the left side of the canvas, instead of bouncing off
         }
     }
     //ball movement vertically
@@ -88,18 +89,30 @@ var drawAll = function(){
   // draws the player's paddle
   drawRect(0, paddleMouseY, paddleThickness, paddleHeight, 'white');
   //draws the ai's paddle
-  drawRect(canvas.width-paddleThickness, paddleMouseY, paddleThickness, paddleHeight, 'white');
+  drawRect(canvas.width-paddleThickness, aiPaddleY, paddleThickness, paddleHeight, 'white');
 
   //draws the ball
   drawCircle(ballX, ballY, 5, 'white');
 
+  //draws the net
+  // drawNet(canvas.width/2, netY, netWidth, netHeight, 'white');
+
+  //net details
+  var netWidth = 5;
+  var netX = canvas.width/2;
+  var netY = 0;
+  var netGap = canvas.height/13;
+  while(netY < canvas.height){
+    c.fillRect(netX, netY+netGap*0.25, netWidth, netGap*0.5);
+    netY+=netGap;
+  }
 
 }
 
 function drawCircle (centerX, centerY, radius, drawColor){
   c.fillStyle = drawColor;
   c.beginPath();
-  c.arc(centerX, centerY, radius, 0,Math.PI*2, false);//no need to change "0,Math.PI*2, false" because to draw circles, this is fixed
+  c.arc(centerX, centerY, radius, 0,Math.PI*2, false);  //no need to change "0,Math.PI*2, false" because to draw circles, this is fixed
   c.fill();
 }
 
@@ -107,3 +120,14 @@ var drawRect = function(x, y, width, height, drawColor){
   c.fillStyle = drawColor;
   c.fillRect(x, y, width, height);
 }
+
+
+// function drawNet(x, y, width, height, drawColor){
+//   for (var netY = 0; netY < canvas.height; netY = netHeight+netGap){
+//       c.fillStyle = drawColor;
+//       c.fillRect(x, y, width, height);
+//     }
+//   }
+
+
+
