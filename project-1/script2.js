@@ -64,15 +64,25 @@ var move = function(){
     if(ballX > canvas.width) {          //when the ball touches the right side of canvas
       if(ballY > aiPaddleY && ballY < aiPaddleY+paddleHeight){ //if the ball is between the top and bottom of the paddle, in other words, touches the paddle
           ballSpeedX = -ballSpeedX;     //the ball will reverse towards the left
+          //the nearer to the edge of the paddle the ball is, the steeper the angle and the faster the speed of the ball will be
+          var centerOfAiPaddle = aiPaddleY+(paddleHeight/2); //finding the center of the player's paddle
+          var ballYOnAiPaddle = ballY - centerOfAiPaddle;   //position of ball on player's paddle
+          ballSpeedY = ballYOnAiPaddle*0.20;
+
       }else {
       resetBall();                      //reset the ball when it touches the right side of the canvas, instead of bouncing off
       playerScore++;                    //adds one point to player
       }
     }
-    //ball moving horizontally, towards left
+    //ball moving vertically and horizontally, towards left
     if(ballX < 0) {                     //when the ball touches the left side of the canvas
        if(ballY > paddleMouseY && ballY < paddleMouseY+paddleHeight){ //if the ball is between the top and bottom of the paddle, in other words, touches the paddle
-          ballSpeedX = -ballSpeedX;     //the ball will turn back towards the right
+          ballSpeedX = -ballSpeedX;     //the ball will turn back towards the right, *horizontally
+          //the nearer to the edge of the paddle the ball is, the steeper the angle and the faster the speed of the ball will be
+          var centerOfPlayerPaddle = paddleMouseY+(paddleHeight/2); //finding the center of the player's paddle
+          var ballYOnPlayerPaddle = ballY - centerOfPlayerPaddle;   //position of ball on player's paddle
+          ballSpeedY = ballYOnPlayerPaddle*0.20;
+
        }else {
        resetBall();                     //reset the ball when it touches the left side of the canvas, instead of bouncing off
        aiScore++;                       //adds one point to ai
