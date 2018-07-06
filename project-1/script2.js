@@ -7,6 +7,13 @@ var player2Name;
 var body = document.getElementsByTagName('body')[0];
 var canvas;
 var c;
+var randomColor;
+// var randomRadius;
+// var dummyBallX;
+// var dummyBallY;
+// var dummyBallRadius;
+// var dummyDy = 5;
+// var dummyDx = 5;
 //ball detplayer2ls
 var ballX = 400;
 var ballY = 300;
@@ -45,8 +52,6 @@ window.onload = function() {
   //start game
   startGameBtn = document.getElementsByTagName('Button')[0];
   startGameBtn.textContent = 'Start Game!';
-  body.appendChild(startGameBtn);
-  startGameBtn.style.margin = '0 0 0 500px';
   if(startGameScreen){
     drawRect(0, 0, canvas.width, canvas.height, 'black');
     c.fillStyle = 'white';
@@ -54,18 +59,18 @@ window.onload = function() {
     c.textAlign = 'center';
     c.fillText("Press Start Button to play" ,390, 200);
 
-    var player1NameInput = document.createElement('input');
-    player1NameInput.style.margin = '0';
-    player1NameInput.placeholder = 'Player 1 Name';
-    body.appendChild(player1NameInput);
+    var player1NameInput = document.getElementsByTagName('input')[0];
+    // player1NameInput.style.margin = '0';
+    // player1NameInput.placeholder = 'Player 1 Name';
+    // body.appendChild(player1NameInput);
     player1NameInput.addEventListener('change', function(event){
       player1Name = player1NameInput.value;
      });
 
-    var player2NameInput = document.createElement('input');
-    player2NameInput.style.margin = '0';
-    player2NameInput.placeholder = 'Player 2 Name';
-    body.appendChild(player2NameInput);
+    var player2NameInput = document.getElementsByTagName('input')[1];
+    // player2NameInput.style.margin = '0';
+    // player2NameInput.placeholder = 'Player 2 Name';
+    // body.appendChild(player2NameInput);
     player2NameInput.addEventListener('change', function(event){
       player2Name = player2NameInput.value;
      });
@@ -87,6 +92,7 @@ window.onload = function() {
             setInterval(function() {
                 move();    //move the ball
                 drawAll(); //draw all items
+                //moveDummyBalls();
                 startGameScreen = false;
             }, 1000/framesPerSecond);
           }
@@ -96,21 +102,19 @@ window.onload = function() {
 
   //Game Title
   gameTitle = document.createElement('h2');
-  gameTitle.textContent = 'The KuKu Game';
+  gameTitle.textContent = 'Pong Game';
   body.appendChild(gameTitle);
   var kukuBird = document.getElementsByTagName('img')[0];
   gameTitle.appendChild(kukuBird);
   body.insertBefore(gameTitle, document.body.children[0]);
   gameTitle.style.fontFamily = "Indie Flower, cursive"
 
+
   //Restart Game Button
-  restartGame = document.createElement('Button');
-  restartGame.textContent = 'Restart!';
-  body.appendChild(restartGame);
-  var gitHubIcon = document.getElementsByClassName('fab')[0];
-  restartGame.appendChild(gitHubIcon);
+  restartGame = document.getElementsByTagName('Button')[1];
+  // var gitHubIcon = document.getElementsByClassName('fab')[0];
+  // restartGame.appendChild(gitHubIcon);
   restartGame.classList.add('close');
-  restartGame.style.margin = '30px 500px 0 0';
   restartGame.addEventListener('click', function(){
     player1Score = 0;
     player2Score = 0;
@@ -118,12 +122,9 @@ window.onload = function() {
   });
 
   //Replay Game Button
-  replayGameBtn = document.createElement('Button');
-  replayGameBtn.textContent = "Re-Play Game ";
-  body.appendChild(replayGameBtn);
-  var replayIcon = document.getElementsByClassName('fa-spin')[0];
-  replayGameBtn.appendChild(replayIcon);
-  replayGameBtn.style.margin = '45px 0 0 30px';
+  replayGameBtn = document.getElementsByTagName('Button')[2];
+   var replayIcon = document.getElementsByClassName('fa-spin')[0];
+  // replayGameBtn.appendChild(replayIcon);
   replayGameBtn.classList.add('replayGameBtn');
   replayGameBtn.addEventListener('click', function(){
     if(showWinScreen){
@@ -218,6 +219,8 @@ var move = function(){
 
     player2Move();
     player1Move();
+
+
 }
 
 var drawAll = function(){
@@ -225,24 +228,31 @@ var drawAll = function(){
   //draws the canvas
   drawRect(0, 0, canvas.width, canvas.height, 'black');
 
-  if(showWinScreen){                                           // a)black everything out/stops the game when someone wins
+  if(showWinScreen){                                                // a)black everything out/stops the game when someone wins
     c.fillStyle = 'white';
     c.font = '20px Arial';
     c.textAlign = 'center';
 
   //show which player wins
-    if(player1Score >= winningScore){                         //if player 1 wins, show "Player 1 won!"
-         c.fillText( player1Name+' Won! ' , 500, 250);             //display score
-         c.fillText(+player1Score+ ' : ' +player2Score, 500, 275);
-        } else if(player2Score >= winningScore){              //if player 2 wins, show "Player 2 won!"
-          c.fillText( player2Name+' Won! ' ,500, 250);             //display score
-          c.fillText(+player1Score+ ' : ' +player2Score, 500, 275);
-        }
+    if(player1Score >= winningScore){                              //if player 1 wins, show "Player 1 won!"
+         c.fillText( player1Name+' Won! ' , 390, 190);             //display score
+         c.fillText(+player1Score+ ' : ' +player2Score, 390, 140);
+         c.fillText('Click to Re-Play', 390, 240);
+    } else if(player2Score >= winningScore){                       //if player 2 wins, show "Player 2 won!"
+          c.fillText( player2Name+' Won! ', 390, 190);             //display score
+          c.fillText(+player1Score+ ' : ' +player2Score, 390, 140);
+          c.fillText('Click to Re-Play', 390, 240);
+    }
 
-        c.fillText('Click to Re-Play', 500, 300);
-
-    return;                                                   // a)black everything out/stops the game when someone wins by returning
+    return;                                                        // a)black everything out/stops the game when someone wins by returning
   }
+
+//generate random colors
+  // var getRandomColors = function(max){
+  // return Math.floor(Math.random() * Math.floor(max));
+  // }
+  // getRandomColors(100);
+  // randomColor = "rgb("+getRandomColors(100)+", "+getRandomColors(100)+", "+getRandomColors(100)+")"; //generate a random color for each ball each time the loop lopps
 
   // draws the player's paddle
   drawRect(0, player1PaddleY, paddleThickness, paddleHeight, 'white');                              //drawRect(x, y, width, height, drawColor )
@@ -263,8 +273,35 @@ var drawAll = function(){
   document.addEventListener('keyup', function(event){                                              //listens for 'keyup event on the document object'
     delete keystate[event.keyCode];                                                                //tells the program nothing is pressed anymore, by deleting that keyCode
   });
+
+
   //draws the ball
   drawCircle(ballX, ballY, 5, 'white');
+
+
+
+  //random radius
+    // var getRandomRadius = function(max){
+    //  return Math.floor(Math.random() * Math.floor(max));
+    //   }
+  //draws the dummyBalls
+  // for(i = 0; i < 100; i++){
+  //    var dummyBallRadius = getRandomRadius(50);                          //generate a random color for each ball each time the loop lopps
+  //    var dummyBallX = Math.random() * canvas.width;                           // spawn the ball on random position within the canvas
+  //    var dummyBallY = Math.random() * canvas.height;                          // spawn the ball on random position within the canvas
+  //    drawDummyBalls(dummyBallX, dummyBallY, dummyBallRadius, 'white');
+  //  }
+
+   // var moveDummyBalls = function(){
+   //  requestAnimatonFrame(moveDummyBalls);
+   //  drawDummyBalls(dummyBallX, dummyBallY, dummyBallRadius, 'white');
+
+   //  if(dummyBallX+dummyBallRadius > canvas.width || dummyBallX-dummyBallRadius < 0) {
+   //    dummyDx = -dummyDy;
+   //  }
+   //  dummyBallX += dummyDx;
+   // }
+   // moveDummyBalls();
 
   // var netWidth = 5;
   // var netX = canvas.width/2;                                      //the position on x axis which the net is to be drawn
@@ -287,6 +324,13 @@ var drawAll = function(){
   c.fillText(player1Name+ " Score: " +player1Score, 100, 100);              //draw the text on x-100 and y-1oo
   c.fillText(player2Name+ " Score: " +player2Score, canvas.width-100, 100); //canvas.height-100 -- 100px from the right side of the canvas
 
+}
+
+var drawDummyBalls = function(dummyX, dummyY, dummyRadius, dummyColor){
+  c.fillStyle = dummyColor;
+  c.beginPath();
+  c.arc(dummyX, dummyY, dummyRadius, 0,Math.PI*2, false);
+  c.fill();
 }
 
 function drawCircle (centerX, centerY, radius, drawColor){
@@ -318,3 +362,6 @@ var player1Move = function(){
     player1PaddleY += 10;                     //when it hears the keyCode in the 'keydown' event, it returns true
    }
 }
+
+
+
