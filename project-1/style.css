@@ -1,7 +1,7 @@
 button {
   font-size: 40px;
-  border-radius: 10px;
-  margin-left: 600px;
+  border-radius: 5px;
+
 }
 
 h2 {
@@ -14,24 +14,32 @@ canvas {
   display: block;
 }
 
-.startGameBtn, .replayGameBtn {
+
+.replayGameBtn {
   border: 3px;
-  margin-bottom: 1px;
+  border-radius: 5px;
   background-color: rgba(33, 73, 94, 0.5);
   border-color: black;
   border-style: solid;
-  margin-top: 20px;
-}
-
-.startGameBtn:hover {
-  border: 10px solid black;
-
+  color: rgba(7, 8, 8);
 }
 
 .replayGameBtn:hover {
-  border: 10px solid black;
+  border: 1px solid black;
+  background-color: rgba(158, 195, 215, 0.5);
+  color: rgb(7, 8, 8, 0.8);
+  cursor: pointer;
 }
 
-.startGameBtn {
-  margin-left: 622px;
+img {
+  height: 100px;
+  width: 100px;
 }
+
+.container {
+  text-align: center;
+}
+
+/*.row{
+  justify-content: space-evenly;
+}*/

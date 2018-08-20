@@ -20,7 +20,7 @@
 // }
 //canvas.drawCircle();
 // the canvas
-var keystate = {};
+var keystate;
 var upKey = 38;
 var downKey = 40;
 var canvas = document.getElementById('theCanvas');
@@ -34,7 +34,7 @@ var net = {
 
   h : 30,
   w : 5,
-  x : canvas.width/2, //
+  x : canvas.width/2,
   y : 0,
   netGap : canvas.height/13, //gap between each net //64.7
 
@@ -52,9 +52,9 @@ var net = {
 var spawnAreaOnX = canvas.width-50;
 var spawnAreaOnY = canvas.height-50;
 var ballX = (spawnAreaOnX/2);
-var ballY = (spawnAreaOnY/2);
-var ballSpeedX = /*((Math.random() - 0.5) * 7) */ (Math.random() < 0.5 ? -1 : 1) * 7; //Math.random() - 0.5 spawns the ball towards a random direction. * 7 is just the speed
-var ballSpeedY = /*((Math.random() - 0.5) * 7) */ (Math.random() < 0.5 ? -1 : 1) * 7; //Math.random() - 0.5 spawns the ball towards a random direction. * 7 is just the speed
+var ballY = (spawnAreaOnY/2);                      //(Math.random()<0.5 ? -1 : 1) checks if the generator value is +ve or -ve
+var ballSpeedX = /*((Math.random() - 0. 5) * 7) */ (Math.random() < 0.5 ? -1 : 1) * 2; //Math.random() - 0.5 spawns the ball towards a random direction. * 2 is just the speed
+var ballSpeedY = /*((Math.random() - 0.5) * 7) */ (Math.random() < 0.5 ? -1 : 1) * 2; //Math.random() - 0.5 spawns the ball towards a random direction. * 2 is just the speed
 
 // ball object
 var ball = {
@@ -81,18 +81,17 @@ var ball = {
   move : function(){
   this.x += this.dx; // makes ball move, along x axis, once it is created
   this.y += this.dy; // makes ball move, along y axis, once it is created
-  if (this.x + this.radius > ai.x || this.x - this.radius < player.x) {//the part where its supposed to bounce off against paddle.
-      this.dx = -this.dx;
+
+ if ((this.x + this.radius > ai.x || this.x - this.radius < player.x)) {//the part where its supposed to bounce off against paddle.
+       this.dx = -this.dx;
     }
-    else if(this.y + this.radius == player.y || this.y - this.radius == ai.y || this.y + this.radius > canvas.height || this.y - this.radius < 0){
-      this.dy = -this.dy;
+  else if(this.y < player.y+player.h || this.y < ai.y+ai.h || this.y + this.radius > canvas.height || this.y - this.radius < 0){
+       this.dy = -this.dy;
     }
-    else if(this.x + this.radius > canvas.width || this.x - this.radius < 0){
       //the ball moves out of the screen
       //the ball the re-spawns at the center of the screen
 
       //canvas.width/2
-    }
  }
 }
 
@@ -110,8 +109,6 @@ var ball = {
     moveDown: downKey, //downArrow's keyCode is 40
     //use keyCode to represent a key on the keyboard. It tells the program what key has been pressed or released.
     //a keyCode is returned to the program when the button has been pressed.
-
-
 
     draw : function(){
       c.beginPath();
@@ -171,11 +168,11 @@ var ball = {
     c.clearRect(0, 0, innerWidth, innerHeight);
     ball.draw();
     ai.draw();
-    ai.move(ball.y, ball.radius);
+    ai.move();
     player.draw();
     player.move();
     net.draw();
-    ball.move(player.y);
+    ball.move();
   }
   animate();
 
